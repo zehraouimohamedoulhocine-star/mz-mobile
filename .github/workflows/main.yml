@@ -1,0 +1,28 @@
+name: Build Android APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4  # Mise à jour v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5 # Mise à jour v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Install Flet
+        run: pip install flet
+      
+      - name: Build APK
+        run: flet build apk --verbose
+      
+      - name: Upload APK
+        uses: actions/upload-artifact@v4 # C'EST ICI LA CORRECTION IMPORTANTE (v4)
+        with:
+          name: mz_app_release
+          path: build/apk/app-release.apk
